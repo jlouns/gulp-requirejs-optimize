@@ -1,0 +1,40 @@
+{
+  "name": "gulp-requirejs-optimize",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "license": "MIT",
+  "repository": "jlouns/gulp-requirejs-optimize",
+  "author": {
+    "name": "Jonathan Lounsbury",
+    "email": "jlouns@gmail.com",
+    "url": "https://github.com/jlouns"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "dependencies": {
+    "amdefine": "^0.1.0",
+    "chalk": "^0.5.1",
+    "gulp-util": "^3.0.0",
+    "requirejs": "^2.1.15",
+    "through2": "^0.6.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.8",
+    "gulp-jshint": "^1.8.4",
+    "gulp-mocha": "^1.1.0",
+    "jshint-stylish": "^1.0.0",
+    "mocha": "*",
+    "should": "^4.0.4"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "gulpplugin"
+  ]
+}
