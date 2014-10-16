@@ -1,1 +1,1 @@
-define(['./three'], function() { });
+define("three",[],function(){}),define("one.js",["./three"],function(){});

@@ -1,1 +1,1 @@
-define([], function() { });
+define("two.js",[],function(){});

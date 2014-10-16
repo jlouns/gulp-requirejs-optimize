@@ -1,1 +1,1 @@
-define([], function() { });
+define("three.js",[],function(){});
