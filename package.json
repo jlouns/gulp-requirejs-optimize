@@ -1,6 +1,6 @@
 {
   "name": "gulp-requirejs-optimize",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "directories": {
@@ -17,18 +17,17 @@
     "node": ">=0.10.0"
   },
   "dependencies": {
-    "amdefine": "^0.1.0",
     "chalk": "^0.5.1",
     "gulp-util": "^3.0.0",
     "requirejs": "^2.1.15",
-    "through2": "^0.6.1"
+    "through2": "^0.6.1",
+    "lodash.defaults": "^2.4.1"
   },
   "devDependencies": {
     "gulp": "^3.8.8",
     "gulp-jshint": "^1.8.4",
     "gulp-mocha": "^1.1.0",
     "jshint-stylish": "^1.0.0",
-    "lodash.defaults": "^2.4.1",
     "mocha": "*",
     "should": "^4.0.4"
   },
