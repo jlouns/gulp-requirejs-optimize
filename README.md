@@ -1,6 +1,6 @@
 # [gulp](http://gulpjs.com)-requirejs-optimize [![Build Status](https://travis-ci.org/jlouns/gulp-requirejs-optimize.svg?branch=master)](https://travis-ci.org/jlouns/gulp-requirejs-optimize)
 
-> Optimize AMD modules in javascript files using the [requirejs](https://www.npmjs.org/package/requirejs) optimizer.
+> Optimize AMD modules in javascript files using the requirejs optimizer.
 
 
 ## Install
