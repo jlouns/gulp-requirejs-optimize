@@ -24,11 +24,13 @@
     "lodash.defaults": "^2.4.1"
   },
   "devDependencies": {
+    "coveralls": "^2.11.2",
     "gulp": "^3.8.8",
     "gulp-jshint": "^1.8.4",
     "gulp-mocha": "^1.1.0",
     "jshint-stylish": "^1.0.0",
     "mocha": "*",
+    "mocha-lcov-reporter": "0.0.1",
     "should": "^4.0.4"
   },
   "scripts": {
