@@ -66,7 +66,9 @@ describe('gulp-requirejs-optimize', function() {
 		});
 
 		it('should accept options object', function(done) {
-			var stream = requirejsOptimize({ });
+			var stream = requirejsOptimize({
+				logLevel: 1
+			});
 
 			testStream(stream, 'main.js', 'main.js', done);
 		});
@@ -77,6 +79,47 @@ describe('gulp-requirejs-optimize', function() {
 			});
 
 			testStream(stream, 'main.js', 'main.js', done);
+		});
+
+		it('should pass through null file', function(done) {
+			var stream = requirejsOptimize();
+
+			var buffer = constructBuffer(stream);
+
+			stream.on('end', function() {
+				try {
+					buffer.should.have.length(1);
+
+					var output = buffer[0];
+
+					output.isNull().should.be.true;
+
+					done();
+				} catch (err) {
+					done(err);
+				}
+			});
+
+			stream.write(new gutil.File());
+
+			stream.end();
+		});
+
+		it('should error on stream file', function(done) {
+			var stream = requirejsOptimize();
+
+			stream.on('error', function (err) {
+				try {
+					err.message.should.equal('Streaming not supported');
+					done();
+				} catch (err) {
+					done(err);
+				}
+			});
+
+			stream.write(new gutil.File({
+				contents: stream
+			}));
 		});
 
 		it('should accept out filename', function(done) {
@@ -116,6 +159,23 @@ describe('gulp-requirejs-optimize', function() {
 			stream.on('error', function (err) {
 				try {
 					err.message.should.equal('If `out` is supplied, it must be a string');
+					done();
+				} catch (err) {
+					done(err);
+				}
+			});
+
+			stream.write(fixture('main.js'));
+		});
+
+		it('should error on invalid options function', function(done) {
+			var stream = requirejsOptimize(function() {
+				return function () { };
+			});
+
+			stream.on('error', function (err) {
+				try {
+					err.message.should.equal('Options function must produce an options object');
 					done();
 				} catch (err) {
 					done(err);

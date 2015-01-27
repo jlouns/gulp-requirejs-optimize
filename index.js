@@ -32,7 +32,6 @@ module.exports = function (options) {
 		generateOptions = options;
 	}
 
-// move options here
 	stream = through.obj(function (file, enc, cb) {
 		if (file.isNull()) {
 			this.push(file);
