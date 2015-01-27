@@ -1,20 +1,29 @@
 'use strict';
 
 var gulp = require('gulp'),
+	coveralls = require('gulp-coveralls'),
+	istanbul = require('gulp-istanbul'),
 	jshint = require('gulp-jshint'),
 	mocha = require('gulp-mocha'),
-	istanbul = require('gulp-istanbul'),
-	coveralls = require('gulp-coveralls');
+	runSequence = require('run-sequence');
 
 var paths = {
 	scripts: './index.js',
 	tests: './test/*.js'
 };
 
-gulp.task('lint', function () {
+gulp.task('jshint', function () {
+	var options = {
+		expr: true,
+		globals: {
+			describe: false,
+			it: false
+		}
+	};
 	return gulp.src([paths.scripts, paths.tests, 'gulpfile.js'])
-		.pipe(jshint())
-		.pipe(jshint.reporter(require('jshint-stylish')));
+		.pipe(jshint(options))
+		.pipe(jshint.reporter('jshint-stylish'))
+		.pipe(jshint.reporter('fail'));
 });
 
 gulp.task('test', function () {
@@ -25,6 +34,7 @@ gulp.task('test', function () {
 gulp.task('coverage', function (done) {
 	gulp.src(paths.scripts)
 		.pipe(istanbul())
+		.pipe(istanbul.hookRequire())
 		.on('finish', function () {
 			gulp.src(paths.tests)
 				.pipe(mocha())
@@ -33,13 +43,17 @@ gulp.task('coverage', function (done) {
 		});
 });
 
-gulp.task('coveralls', ['coverage'], function () {
+gulp.task('coveralls', function () {
 	return gulp.src('./coverage/lcov.info')
 		.pipe(coveralls());
 });
 
-gulp.task('watch', function () {
-	gulp.watch(paths.scripts, ['lint', 'test']);
+gulp.task('ci', function(done) {
+	runSequence('jshint', 'coverage', 'coveralls', done);
 });
 
-gulp.task('default', ['lint', 'test']);
+gulp.task('watch', function () {
+	gulp.watch(paths.scripts, ['jshint', 'test']);
+});
+
+gulp.task('default', ['jshint', 'test']);
