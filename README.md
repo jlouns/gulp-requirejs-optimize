@@ -1,5 +1,5 @@
 # [gulp](http://gulpjs.com)-requirejs-optimize
-[![Codeship Status for jlouns/gulp-requirejs-optimize](https://codeship.com/projects/843032e0-8803-0132-e90e-2af52e5bc1ec/status?branch=master)](https://codeship.com/projects/59318)
+[![Build Status](https://travis-ci.org/jlouns/gulp-requirejs-optimize.svg?branch=master)](https://travis-ci.org/jlouns/gulp-requirejs-optimize)
 [![npm version](https://badge.fury.io/js/gulp-requirejs-optimize.svg)](http://badge.fury.io/js/gulp-requirejs-optimize)
 [![Coverage Status](https://coveralls.io/repos/jlouns/gulp-requirejs-optimize/badge.png)](https://coveralls.io/r/jlouns/gulp-requirejs-optimize)
 [![Dependency Status](https://david-dm.org/jlouns/gulp-requirejs-optimize.svg)](https://david-dm.org/jlouns/gulp-requirejs-optimize)
