@@ -1,0 +1,7 @@
+.npmignore
+.editorconfig
+.gitattributes
+.travis.yml
+.jshintrc
+gulpfile.js
+test
