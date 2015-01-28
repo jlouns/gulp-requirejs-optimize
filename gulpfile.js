@@ -8,20 +8,13 @@ var gulp = require('gulp'),
 	runSequence = require('run-sequence');
 
 var paths = {
-	scripts: './index.js',
-	tests: './test/*.js'
+	scripts: 'index.js',
+	tests: 'test/*.js'
 };
 
 gulp.task('jshint', function () {
-	var options = {
-		expr: true,
-		globals: {
-			describe: false,
-			it: false
-		}
-	};
 	return gulp.src([paths.scripts, paths.tests, 'gulpfile.js'])
-		.pipe(jshint(options))
+		.pipe(jshint())
 		.pipe(jshint.reporter('jshint-stylish'))
 		.pipe(jshint.reporter('fail'));
 });
@@ -39,7 +32,7 @@ gulp.task('test', function (done) {
 });
 
 gulp.task('coveralls', function () {
-	return gulp.src('./coverage/lcov.info')
+	return gulp.src('coverage/lcov.info')
 		.pipe(coveralls());
 });
 
