@@ -26,12 +26,7 @@ gulp.task('jshint', function () {
 		.pipe(jshint.reporter('fail'));
 });
 
-gulp.task('test', function () {
-	return gulp.src(paths.tests)
-		.pipe(mocha());
-});
-
-gulp.task('coverage', function (done) {
+gulp.task('test', function (done) {
 	gulp.src(paths.scripts)
 		.pipe(istanbul())
 		.pipe(istanbul.hookRequire())
@@ -49,7 +44,7 @@ gulp.task('coveralls', function () {
 });
 
 gulp.task('ci', function(done) {
-	runSequence('jshint', 'coverage', 'coveralls', done);
+	runSequence('jshint', 'test', 'coveralls', done);
 });
 
 gulp.task('watch', function () {
