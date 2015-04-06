@@ -36,7 +36,7 @@ var constructBuffer = function(stream) {
 };
 
 var compare = function(actual, expected) {
-	String(actual.contents).should.equal(String(expected.contents));
+	String(actual.contents).trim().should.equal(String(expected.contents).trim());
 };
 
 var testStream = function(stream, fixtureName, expectedName, done) {
@@ -61,7 +61,7 @@ var testStream = function(stream, fixtureName, expectedName, done) {
 describe('gulp-requirejs-optimize', function() {
 
 	describe('requirejsOptimize', function() {
-		it('should accept no options', function (done) {
+		it('should accept no options', function(done) {
 			var stream = requirejsOptimize();
 
 			testStream(stream, 'main.js', 'main.js', done);
@@ -81,6 +81,16 @@ describe('gulp-requirejs-optimize', function() {
 			});
 
 			testStream(stream, 'main.js', 'main.js', done);
+		});
+
+		it('should accept name parameter', function(done) {
+			var stream = requirejsOptimize(function() {
+				return {
+					name: 'main-define'
+				};
+			});
+
+			testStream(stream, 'main-define.js', 'main-define.js', done);
 		});
 
 		it('should pass through null file', function(done) {
@@ -110,7 +120,7 @@ describe('gulp-requirejs-optimize', function() {
 		it('should error on stream file', function(done) {
 			var stream = requirejsOptimize();
 
-			stream.on('error', function (err) {
+			stream.on('error', function(err) {
 				try {
 					err.message.should.equal('Streaming not supported');
 					done();
@@ -158,7 +168,7 @@ describe('gulp-requirejs-optimize', function() {
 				out: function() { }
 			});
 
-			stream.on('error', function (err) {
+			stream.on('error', function(err) {
 				try {
 					err.message.should.equal('If `out` is supplied, it must be a string');
 					done();
@@ -172,10 +182,10 @@ describe('gulp-requirejs-optimize', function() {
 
 		it('should error on invalid options function', function(done) {
 			var stream = requirejsOptimize(function() {
-				return function () { };
+				return function() { };
 			});
 
-			stream.on('error', function (err) {
+			stream.on('error', function(err) {
 				try {
 					err.message.should.equal('Options function must produce an options object');
 					done();
@@ -190,7 +200,7 @@ describe('gulp-requirejs-optimize', function() {
 		it('should emit errors from requirejs', function(done) {
 			var stream = requirejsOptimize();
 
-			stream.on('error', function () {
+			stream.on('error', function() {
 				done();
 			});
 
@@ -210,7 +220,7 @@ describe('gulp-requirejs-optimize', function() {
 					filenames.should.containEql(file.relative);
 					compare(file, expected(file.relative));
 
-					if(count === 2) {
+					if (count === 2) {
 						done();
 					}
 				} catch (err) {

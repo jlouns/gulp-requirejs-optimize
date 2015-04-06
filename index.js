@@ -8,12 +8,12 @@ var chalk = require('chalk');
 
 var PLUGIN_NAME = 'gulp-requirejs-optimize';
 
-module.exports = function (options) {
+module.exports = function(options) {
 	var stream;
 
 	requirejs.define('node/print', [], function() {
 		return function(msg) {
-			if(msg.substring(0, 5) === 'Error') {
+			if (msg.substring(0, 5) === 'Error') {
 				gutil.log(chalk.red(msg));
 			} else {
 				gutil.log(msg);
@@ -24,7 +24,7 @@ module.exports = function (options) {
 	options = options || {};
 
 	var generateOptions;
-	if(typeof options !== 'function') {
+	if (typeof options !== 'function') {
 		generateOptions = function() {
 			return options;
 		};
@@ -32,7 +32,7 @@ module.exports = function (options) {
 		generateOptions = options;
 	}
 
-	stream = through.obj(function (file, enc, cb) {
+	stream = through.obj(function(file, enc, cb) {
 		if (file.isNull()) {
 			this.push(file);
 			return cb();
@@ -44,18 +44,21 @@ module.exports = function (options) {
 		}
 
 		var optimizeOptions = generateOptions(file);
-		if(typeof optimizeOptions !== 'object') {
+		if (typeof optimizeOptions !== 'object') {
 			this.emit('error', new gutil.PluginError(PLUGIN_NAME, 'Options function must produce an options object'));
 		}
 
 		optimizeOptions = defaults({}, optimizeOptions, {
 			logLevel: 2,
 			baseUrl: file.base,
-			include: file.relative,
 			out: file.relative
 		});
 
-		if(typeof optimizeOptions.out !== 'string') {
+		if (!optimizeOptions.include && !optimizeOptions.name) {
+			optimizeOptions.include = file.relative;
+		}
+
+		if (typeof optimizeOptions.out !== 'string') {
 			this.emit('error', new gutil.PluginError(PLUGIN_NAME, 'If `out` is supplied, it must be a string'));
 			return cb();
 		}
