@@ -19,9 +19,10 @@
   "dependencies": {
     "chalk": "^1.0.0",
     "gulp-util": "^3.0.4",
+    "lodash.defaults": "^3.1.0",
     "requirejs": "^2.1.17",
     "through2": "^0.6.3",
-    "lodash.defaults": "^3.1.0"
+    "vinyl-sourcemaps-apply": "^0.1.4"
   },
   "devDependencies": {
     "gulp": "^3.8.11",
