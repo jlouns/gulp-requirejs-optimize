@@ -46,8 +46,22 @@ gulp.task('scripts', function () {
 });
 ```
 
+### Multiple Modules
+Each file passed to the plugin is optimized as a separate module.
+
+```js
+var gulp = require('gulp');
+var requirejsOptimize = require('gulp-requirejs-optimize');
+
+gulp.task('scripts', function () {
+	return gulp.src('src/modules/*.js')
+		.pipe(requirejsOptimize())
+		.pipe(gulp.dest('dist'));
+});
+```
+
 ### Options generating function
-Options can also be specified in the form of an options-generating function to generate custom options for each file passed. This can be used to optimize multiple bundles or modules in an app.
+Options can also be specified in the form of an options-generating function to generate custom options for each file passed. This can be used to apply custom logic while optimizing multiple bundles or modules in an app.
 
 ```js
 var gulp = require('gulp');
@@ -61,7 +75,7 @@ gulp.task('scripts', function () {
 				optimize: 'none',
 				useStrict: true,
 				baseUrl: 'path/to/base',
-				include: 'subdir/' + filename
+				include: 'subdir/' + file.relative
 			};
 		}))
 		.pipe(gulp.dest('dist'));
@@ -74,7 +88,11 @@ gulp.task('scripts', function () {
 
 #### options
 
-Options are the same as what is supported by the [r.js optimizer](https://github.com/jrburke/r.js/blob/master/build/example.build.js) except for `out`. r.js supports `out` as a string describing a path or a function which processes the output. Since we need to pass a virtual file as output, we only support the string version of `out`.
+Options are the same as what is supported by the [r.js optimizer](https://github.com/jrburke/r.js/blob/master/build/example.build.js) except for `out` and `modules`.
+
+r.js supports `out` as a string describing a path or a function which processes the output. Since we need to pass a virtual file as output, we only support the string version of `out`.
+
+r.js also supports an array of `modules` to optimize multiple modules at once. The same thing can be accomplished with this plugin by passing the main file of each module as input to the plugin.
 
 The options parameter can be specified as a static object or an options-generating function. Options-generating functions are passed a file object and are expected to generate an options object.
 
