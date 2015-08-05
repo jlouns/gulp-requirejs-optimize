@@ -149,7 +149,7 @@ describe('gulp-requirejs-optimize', function() {
 
 					var output = buffer[0];
 
-					output.relative.should.equal(outpath);
+					output.relative.replace(/\\/g, '/').should.equal(outpath);
 					compare(output, expected('main.js'));
 
 					done();
@@ -200,11 +200,13 @@ describe('gulp-requirejs-optimize', function() {
 		it('should emit errors from requirejs', function(done) {
 			var stream = requirejsOptimize();
 
+			stream.write(fixture('error.js'));
+
 			stream.on('error', function() {
 				done();
 			});
 
-			stream.write(fixture('error.js'));
+			stream.end();
 		});
 
 		it('should optimize multiple files', function(done) {

@@ -9,8 +9,6 @@ var chalk = require('chalk');
 var PLUGIN_NAME = 'gulp-requirejs-optimize';
 
 module.exports = function(options) {
-	var stream;
-
 	requirejs.define('node/print', [], function() {
 		return function(msg) {
 			if (msg.substring(0, 5) === 'Error') {
@@ -32,20 +30,23 @@ module.exports = function(options) {
 		generateOptions = options;
 	}
 
-	stream = through.obj(function(file, enc, cb) {
+	var error;
+
+	return through.obj(function(file, enc, cb) {
 		if (file.isNull()) {
-			this.push(file);
-			return cb();
+			cb(null, file);
+			return;
 		}
 
 		if (file.isStream()) {
-			this.emit('error', new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported'));
-			return cb();
+			cb(new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported'));
+			return;
 		}
 
 		var optimizeOptions = generateOptions(file);
 		if (typeof optimizeOptions !== 'object') {
-			this.emit('error', new gutil.PluginError(PLUGIN_NAME, 'Options function must produce an options object'));
+			cb(new gutil.PluginError(PLUGIN_NAME, 'Options function must produce an options object'));
+			return;
 		}
 
 		optimizeOptions = defaults({}, optimizeOptions, {
@@ -59,8 +60,8 @@ module.exports = function(options) {
 		}
 
 		if (typeof optimizeOptions.out !== 'string') {
-			this.emit('error', new gutil.PluginError(PLUGIN_NAME, 'If `out` is supplied, it must be a string'));
-			return cb();
+			cb(new gutil.PluginError(PLUGIN_NAME, 'If `out` is supplied, it must be a string'));
+			return;
 		}
 
 		var out = optimizeOptions.out;
@@ -73,9 +74,14 @@ module.exports = function(options) {
 
 		gutil.log('Optimizing ' + chalk.magenta(file.relative));
 		requirejs.optimize(optimizeOptions, null, function(err) {
-			stream.emit('error', new gutil.PluginError(PLUGIN_NAME, err.message));
+			error = err;
+			cb();
 		});
-	});
+	}, function(cb) {
+		if (error) {
+			cb(new gutil.PluginError(PLUGIN_NAME, error));
+		}
 
-	return stream;
+		cb()
+	});
 };
