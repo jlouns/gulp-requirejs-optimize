@@ -82,6 +82,6 @@ module.exports = function(options) {
 			cb(new gutil.PluginError(PLUGIN_NAME, error));
 		}
 
-		cb()
+		cb();
 	});
 };
