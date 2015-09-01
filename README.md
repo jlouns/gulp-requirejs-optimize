@@ -82,6 +82,23 @@ gulp.task('scripts', function () {
 });
 ```
 
+### Sourcemaps support
+The plugin supports [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps) only if both `uglify2` optimization is used and `preserveLicenseComments` is set to false, as described in the `r.js` docs. If neither of these options are defined and the gulp-sourcemaps plugin is detected, the plugin will automatically set `optimize` to uglify2 and `preserveLicenseComments` to false.
+
+```js
+var gulp = require('gulp');
+var requirejsOptimize = require('gulp-requirejs-optimize');
+var sourcemaps = require('gulp-sourcemaps');
+
+gulp.task('scripts', function () {
+	return gulp.src('src/main.js')
+		.pipe(sourcemaps.init())
+		.pipe(requirejsOptimize())
+		.pipe(sourcemaps.write())
+		.pipe(gulp.dest('dist'));
+});
+```
+
 ## API
 
 ### requirejsOptimize(options)
