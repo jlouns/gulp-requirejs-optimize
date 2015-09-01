@@ -234,8 +234,6 @@ describe('gulp-requirejs-optimize', function() {
 		});
 
 		it('should support gulp-sourcemaps', function(done) {
-			this.timeout(30000);
-
 			var stream = requirejsOptimize({
 				optimize: 'uglify2'
 			});
