@@ -57,9 +57,11 @@ module.exports = function(options) {
 			generateSourceMaps: !!file.sourceMap
 		});
 
-		if (optimizeOptions.generateSourceMaps &&
-			typeof optimizeOptions.preserveLicenseComments === 'undefined') {
-			optimizeOptions.preserveLicenseComments = false;
+		if (optimizeOptions.generateSourceMaps) {
+			defaults(optimizeOptions, {
+				preserveLicenseComments: false,
+				optimize: 'uglify2'
+			});
 		}
 
 		if (!optimizeOptions.include && !optimizeOptions.name) {

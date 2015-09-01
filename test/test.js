@@ -234,9 +234,7 @@ describe('gulp-requirejs-optimize', function() {
 		});
 
 		it('should support gulp-sourcemaps', function(done) {
-			var stream = requirejsOptimize({
-				optimize: 'uglify2'
-			});
+			var stream = requirejsOptimize();
 
 			var buffer = constructBuffer(stream);
 
