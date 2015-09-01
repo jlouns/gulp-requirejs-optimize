@@ -84,10 +84,8 @@ describe('gulp-requirejs-optimize', function() {
 		});
 
 		it('should accept name parameter', function(done) {
-			var stream = requirejsOptimize(function() {
-				return {
-					name: 'main-define'
-				};
+			var stream = requirejsOptimize({
+				name: 'main-define'
 			});
 
 			testStream(stream, 'main-define.js', 'main-define.js', done);
