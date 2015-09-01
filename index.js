@@ -5,6 +5,7 @@ var gutil = require('gulp-util');
 var through = require('through2');
 var requirejs = require('requirejs');
 var chalk = require('chalk');
+var applySourceMap = require('vinyl-sourcemaps-apply');
 
 var PLUGIN_NAME = 'gulp-requirejs-optimize';
 
@@ -52,7 +53,8 @@ module.exports = function(options) {
 		optimizeOptions = defaults({}, optimizeOptions, {
 			logLevel: 2,
 			baseUrl: file.base,
-			out: file.relative
+			out: file.relative,
+			generateSourceMaps: !!file.sourceMap
 		});
 
 		if (!optimizeOptions.include && !optimizeOptions.name) {
@@ -65,11 +67,17 @@ module.exports = function(options) {
 		}
 
 		var out = optimizeOptions.out;
-		optimizeOptions.out = function(text) {
-			cb(null, new gutil.File({
+		optimizeOptions.out = function(text, sourceMapText) {
+			var file = new gutil.File({
 				path: out,
 				contents: new Buffer(text)
-			}));
+			});
+
+			if (sourceMapText) {
+				applySourceMap(file, sourceMapText);
+			}
+
+			cb(null, file);
 		};
 
 		gutil.log('Optimizing ' + chalk.magenta(file.relative));
