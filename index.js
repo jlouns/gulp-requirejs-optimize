@@ -57,6 +57,11 @@ module.exports = function(options) {
 			generateSourceMaps: !!file.sourceMap
 		});
 
+		if (optimizeOptions.generateSourceMaps &&
+			typeof optimizeOptions.preserveLicenseComments === 'undefined') {
+			optimizeOptions.preserveLicenseComments = false;
+		}
+
 		if (!optimizeOptions.include && !optimizeOptions.name) {
 			optimizeOptions.include = file.relative;
 		}

@@ -2,7 +2,7 @@
 /* global describe, it */
 'use strict';
 
-require('should');
+var should = require('should');
 var fs = require('fs');
 var gutil = require('gulp-util');
 var path = require('path');
@@ -232,5 +232,52 @@ describe('gulp-requirejs-optimize', function() {
 				stream.write(fixture(filename));
 			});
 		});
+
+		it('should support gulp-sourcemaps', function(done) {
+			this.timeout(30000);
+
+			var stream = requirejsOptimize({
+				optimize: 'uglify2'
+			});
+
+			var buffer = constructBuffer(stream);
+
+			stream.on('end', function() {
+				try {
+					buffer.should.have.length(1);
+
+					var output = buffer[0];
+
+					should.exist(output.sourceMap);
+
+					output.sourceMap.should
+						.have.property('sources')
+						.which.is.an.Array()
+						.and.has.lengthOf(4);
+
+					output.sourceMap.should
+						.have.property('sourcesContent')
+						.which.is.an.Array()
+						.and.has.lengthOf(4);
+
+					output.sourceMap.sources[0].should.equal('three.js');
+					output.sourceMap.sources[1].should.equal('one.js');
+					output.sourceMap.sources[2].should.equal('two.js');
+					output.sourceMap.sources[3].should.equal('main.js');
+
+					done();
+				} catch (err) {
+					done(err);
+				}
+			});
+
+			var file = fixture('main.js');
+			file.sourceMap = {};
+
+			stream.write(file);
+
+			stream.end();
+		});
+
 	});
 });
