@@ -6,13 +6,11 @@
 
 Optimize AMD modules in javascript files using the requirejs optimizer.
 
-
 ## Install
 
 ```sh
 $ npm install --save-dev gulp-requirejs-optimize
 ```
-
 
 ## Usage
 
@@ -105,13 +103,39 @@ gulp.task('scripts', function () {
 
 #### options
 
-Options are the same as what is supported by the [r.js optimizer](https://github.com/jrburke/r.js/blob/master/build/example.build.js) except for `out` and `modules`.
-
-r.js supports `out` as a string describing a path or a function which processes the output. Since we need to pass a virtual file as output, we only support the string version of `out`.
-
-r.js also supports an array of `modules` to optimize multiple modules at once. The same thing can be accomplished with this plugin by passing the main file of each module as input to the plugin.
+Options are the same as what is supported by the [r.js optimizer](https://github.com/jrburke/r.js/blob/master/build/example.build.js) except for `out`, `modules`, and `dir`.
 
 The options parameter can be specified as a static object or an options-generating function. Options-generating functions are passed a file object and are expected to generate an options object.
+
+## Differences From r.js
+
+### out
+r.js supports `out` as a string describing a path or a function which processes the output. Since we need to pass a virtual file as output, we only support the string version of `out`.
+
+### modules and dir
+r.js supports an array of `modules` to optimize multiple modules at once, using the `dir` parameter for the output directory. The same thing can be accomplished with this plugin by passing the main file of each module as input to the plugin. `gulp.dest` can be used to specify the output directory.
+
+This means an r.js config file for optimizing multiple modules that looks like this:
+```json
+{
+	"baseUrl": "src/modules",
+	"dir": "dist",
+	"modules": [{
+		"name": "one"
+	}, {
+		"name": "two"
+	}]
+}
+```
+
+Would look like this as a gulp task with this plugin:
+```js
+gulp.task('scripts', function () {
+	return gulp.src('src/modules/*.js')
+		.pipe(requirejsOptimize())
+		.pipe(gulp.dest('dist'));
+});
+```
 
 ## License
 
