@@ -1,3 +1,10 @@
+# .gitignore contents
+.idea/
+*.iml
+
+coverage/
+
+# development-specific items
 .npmignore
 .editorconfig
 .gitattributes
