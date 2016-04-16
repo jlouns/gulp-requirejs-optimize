@@ -39,7 +39,7 @@ var compare = function(actual, expected) {
 	String(actual.contents).trim().should.equal(String(expected.contents).trim());
 };
 
-var testStream = function(stream, fixtureName, expectedName, done) {
+var testStream = function(stream, fixtureSupplier, expectedName, done) {
 	var buffer = constructBuffer(stream);
 
 	stream.on('end', function() {
@@ -53,7 +53,11 @@ var testStream = function(stream, fixtureName, expectedName, done) {
 		done();
 	});
 
-	stream.write(fixture(fixtureName));
+	if (typeof fixtureSupplier === 'string') {
+		fixtureSupplier = fixture.bind(null, fixtureSupplier);
+	}
+
+	stream.write(fixtureSupplier());
 
 	stream.end();
 };
@@ -159,6 +163,35 @@ describe('gulp-requirejs-optimize', function() {
 			stream.write(fixture('main.js'));
 
 			stream.end();
+		});
+
+		it('should accept a non .js file', function(done) {
+			var stream = requirejsOptimize({
+				out: 'main.js'
+			});
+
+			var fixtureSupplier = function() {
+				var input = fixture('main.js');
+				input.path = path.join('test', 'fixtures', 'main');
+				return input;
+			};
+
+			testStream(stream, fixtureSupplier, 'main.js', done);
+		});
+
+		it('should accept Windows paths', function(done) {
+			var stream = requirejsOptimize({
+				out: 'main-windows.js'
+			});
+
+			var fixtureSupplier = function() {
+				var input = fixture('main.js');
+				input.base = '.';
+				input.path = path.join('test', 'fixtures', 'main.js').replace(/\//g,'\\');
+				return input;
+			};
+
+			testStream(stream, fixtureSupplier, 'main-windows.js', done);
 		});
 
 		it('should not accept out function', function(done) {

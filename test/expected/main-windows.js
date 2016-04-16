@@ -1,0 +1,1 @@
+define("test/fixtures/three",[],function(){}),define("test/fixtures/one",["./three"],function(){}),define("test/fixtures/two",[],function(){}),require(["./one","./two"],function(){}),define("test/fixtures/main",function(){});

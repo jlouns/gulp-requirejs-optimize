@@ -9,6 +9,20 @@ var applySourceMap = require('vinyl-sourcemaps-apply');
 
 var PLUGIN_NAME = 'gulp-requirejs-optimize';
 
+function pathToModuleId(path) {
+	// replace Windows path separators to make sure this is a valid module ID
+	path = path.replace(/\\/g, '/');
+
+	// remove the file extension if this is a .js file
+	var filenameEndIndex = path.length - 3;
+	var extensionIndex = path.indexOf('.js', filenameEndIndex);
+	if (extensionIndex !== -1 && extensionIndex === filenameEndIndex) {
+		path = path.substring(0, filenameEndIndex);
+	}
+
+	return path;
+}
+
 module.exports = function(options) {
 	requirejs.define('node/print', [], function() {
 		return function(msg) {
@@ -65,7 +79,7 @@ module.exports = function(options) {
 		}
 
 		if (!optimizeOptions.include && !optimizeOptions.name) {
-			optimizeOptions.include = file.relative;
+			optimizeOptions.include = pathToModuleId(file.relative);
 		}
 
 		if (typeof optimizeOptions.out !== 'string') {
