@@ -2,6 +2,7 @@
 
 var defaults = require('lodash.defaults');
 var gutil = require('gulp-util');
+var path = require('path');
 var through = require('through2');
 var requirejs = require('requirejs');
 var chalk = require('chalk');
@@ -101,7 +102,14 @@ module.exports = function(options) {
 			cb(null, file);
 		};
 
-		gutil.log('Optimizing ' + chalk.magenta(file.relative));
+		var target;
+		if (optimizeOptions.logLevel < 2) {
+			target = path.resolve(file.path);
+		} else {
+			target = file.relative;
+		}
+		
+		gutil.log('Optimizing ' + chalk.magenta(target));
 		requirejs.optimize(optimizeOptions, null, function(err) {
 			error = err;
 			cb();
