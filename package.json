@@ -1,6 +1,6 @@
 {
   "name": "gulp-requirejs-optimize",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "RequireJS optimizer plugin for gulp",
   "main": "index.js",
   "directories": {
