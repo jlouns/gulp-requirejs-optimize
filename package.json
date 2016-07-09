@@ -20,7 +20,7 @@
     "chalk": "^1.1.1",
     "gulp-util": "^3.0.7",
     "lodash.defaults": "^4.0.1",
-    "requirejs": "^2.1.22",
+    "requirejs": "^2.2.0",
     "through2": "^2.0.1",
     "vinyl-sourcemaps-apply": "^0.2.1"
   },
