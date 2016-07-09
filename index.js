@@ -77,8 +77,7 @@ module.exports = function(options) {
 
 		if (optimizeOptions.generateSourceMaps) {
 			defaults(optimizeOptions, {
-				preserveLicenseComments: false,
-				optimize: 'uglify2'
+				preserveLicenseComments: false
 			});
 		}
 

@@ -81,7 +81,7 @@ gulp.task('scripts', function () {
 ```
 
 ### Sourcemaps support
-The plugin supports [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps) only if both `uglify2` optimization is used and `preserveLicenseComments` is set to false, as described in the `r.js` docs. If neither of these options are defined and the gulp-sourcemaps plugin is detected, the plugin will automatically set `optimize` to uglify2 and `preserveLicenseComments` to false.
+The plugin supports [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps) only if `preserveLicenseComments` is set to false, as described in the `r.js` docs. If `preserveLicenseComments` is not specified and the `gulp-sourcemaps` plugin is detected, the plugin will automatically set `preserveLicenseComments` to false.
 
 ```js
 var gulp = require('gulp');
