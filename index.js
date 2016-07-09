@@ -66,11 +66,13 @@ module.exports = function(options) {
 			return;
 		}
 
+		var sourceMapPresent = Boolean(file.sourceMap);
+		
 		optimizeOptions = defaults({}, optimizeOptions, {
 			logLevel: 2,
 			baseUrl: file.base,
 			out: file.relative,
-			generateSourceMaps: Boolean(file.sourceMap)
+			generateSourceMaps: sourceMapPresent
 		});
 
 		if (optimizeOptions.generateSourceMaps) {
@@ -91,16 +93,21 @@ module.exports = function(options) {
 
 		var out = optimizeOptions.out;
 		optimizeOptions.out = function(text, sourceMapText) {
-			var file = new gutil.File({
+			if (sourceMapPresent) {
+				// uglify adds its own sourceMappingURL comment which will get duplicated by gulp-sourcemaps
+				text = text.replace(/\/\/# sourceMappingURL=.*$/, '');
+			}
+
+			var outfile = new gutil.File({
 				path: out,
 				contents: new Buffer(text)
 			});
 
 			if (sourceMapText) {
-				applySourceMap(file, sourceMapText);
+				applySourceMap(outfile, sourceMapText);
 			}
 
-			cb(null, file);
+			cb(null, outfile);
 		};
 
 		var target;

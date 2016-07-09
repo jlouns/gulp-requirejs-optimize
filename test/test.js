@@ -292,6 +292,8 @@ describe('gulp-requirejs-optimize', function() {
 				output.sourceMap.sources[2].should.equal('two.js');
 				output.sourceMap.sources[3].should.equal('main.js');
 
+				String(output.contents).should.not.containEql('sourceMappingURL');
+
 				done();
 			} catch (err) {
 				done(err);
