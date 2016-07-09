@@ -1,36 +1,33 @@
 'use strict';
 
-var gulp = require('gulp'),
-	coveralls = require('gulp-coveralls'),
-	istanbul = require('gulp-istanbul'),
-	jshint = require('gulp-jshint'),
-	jscs = require('gulp-jscs'),
-	mocha = require('gulp-mocha'),
-	runSequence = require('run-sequence');
+var gulp = require('gulp');
+
+var coveralls = require('gulp-coveralls');
+var istanbul = require('gulp-istanbul');
+var mocha = require('gulp-mocha');
+var runSequence = require('run-sequence');
+var xo = require('gulp-xo');
 
 var paths = {
 	scripts: 'index.js',
 	tests: 'test/*.js'
 };
 
-gulp.task('jshint', function() {
+gulp.task('lint', function() {
 	return gulp.src([paths.scripts, paths.tests, 'gulpfile.js'])
-		.pipe(jshint())
-		.pipe(jshint.reporter('jshint-stylish'))
-		.pipe(jshint.reporter('fail'))
-		.pipe(jscs());
+		.pipe(xo());
 });
 
-gulp.task('test', function(done) {
-	gulp.src(paths.scripts)
+gulp.task('pre-test', function() {
+	return gulp.src(paths.scripts)
 		.pipe(istanbul())
-		.pipe(istanbul.hookRequire())
-		.on('finish', function() {
-			gulp.src(paths.tests)
-				.pipe(mocha())
-				.pipe(istanbul.writeReports())
-				.on('end', done);
-		});
+		.pipe(istanbul.hookRequire());
+});
+
+gulp.task('test', ['pre-test'], function() {
+	return gulp.src(paths.tests)
+		.pipe(mocha())
+		.pipe(istanbul.writeReports());
 });
 
 gulp.task('coveralls', function() {
@@ -39,11 +36,11 @@ gulp.task('coveralls', function() {
 });
 
 gulp.task('ci', function(done) {
-	runSequence('jshint', 'test', 'coveralls', done);
+	runSequence('lint', 'test', 'coveralls', done);
 });
 
 gulp.task('watch', function() {
-	gulp.watch(paths.scripts, ['jshint', 'test']);
+	gulp.watch(paths.scripts, ['lint', 'test']);
 });
 
-gulp.task('default', ['jshint', 'test']);
+gulp.task('default', ['lint', 'test']);

@@ -1,14 +1,14 @@
 # .gitignore contents
-.idea/
+/.idea/
 *.iml
 
-coverage/
-
 # development-specific items
-.npmignore
 .editorconfig
 .gitattributes
+.gitignore
+.npmignore
 .travis.yml
-.jshintrc
 gulpfile.js
-test
+
+/coverage/
+/test/

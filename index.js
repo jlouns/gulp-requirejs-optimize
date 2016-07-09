@@ -1,8 +1,9 @@
 'use strict';
 
+var path = require('path');
+
 var defaults = require('lodash.defaults');
 var gutil = require('gulp-util');
-var path = require('path');
 var through = require('through2');
 var requirejs = require('requirejs');
 var chalk = require('chalk');
@@ -38,12 +39,12 @@ module.exports = function(options) {
 	options = options || {};
 
 	var generateOptions;
-	if (typeof options !== 'function') {
+	if (typeof options === 'function') {
+		generateOptions = options;
+	} else {
 		generateOptions = function() {
 			return options;
 		};
-	} else {
-		generateOptions = options;
 	}
 
 	var error;
@@ -69,7 +70,7 @@ module.exports = function(options) {
 			logLevel: 2,
 			baseUrl: file.base,
 			out: file.relative,
-			generateSourceMaps: !!file.sourceMap
+			generateSourceMaps: Boolean(file.sourceMap)
 		});
 
 		if (optimizeOptions.generateSourceMaps) {
@@ -108,7 +109,7 @@ module.exports = function(options) {
 		} else {
 			target = file.relative;
 		}
-		
+
 		gutil.log('Optimizing ' + chalk.magenta(target));
 		requirejs.optimize(optimizeOptions, null, function(err) {
 			error = err;
