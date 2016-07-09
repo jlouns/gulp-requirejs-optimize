@@ -67,7 +67,7 @@ module.exports = function(options) {
 		}
 
 		var sourceMapPresent = Boolean(file.sourceMap);
-		
+
 		optimizeOptions = defaults({}, optimizeOptions, {
 			logLevel: 2,
 			baseUrl: file.base,

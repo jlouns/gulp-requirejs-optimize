@@ -14,7 +14,7 @@ var paths = {
 };
 
 gulp.task('lint', function() {
-	return gulp.src([paths.scripts, paths.tests, 'gulpfile.js'])
+	return gulp.src([paths.scripts, paths.tests, 'test/utils/*.js', 'gulpfile.js'])
 		.pipe(xo());
 });
 

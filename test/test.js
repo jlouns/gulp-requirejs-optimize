@@ -1,66 +1,20 @@
 /* global describe, it */
 'use strict';
 
-var fs = require('fs');
 var path = require('path');
 
 var should = require('should');
 var gutil = require('gulp-util');
 var requirejsOptimize = require('../');
 
-var getFile = function(filepath) {
-	return new gutil.File({
-		base: path.dirname(filepath),
-		path: filepath,
-		cwd: './test/',
-		contents: fs.readFileSync(filepath)
-	});
-};
+var fixture = require('./utils/fixture');
+var expected = require('./utils/expected');
 
-var fixture = function(filepath) {
-	return getFile(path.join('test', 'fixtures', filepath));
-};
+var constructBuffer = require('./utils/construct-buffer');
 
-var expected = function(filepath) {
-	return getFile(path.join('test', 'expected', filepath));
-};
+var compare = require('./utils/compare');
 
-var constructBuffer = function(stream) {
-	var buffer = [];
-
-	stream.on('data', function(file) {
-		buffer.push(file);
-	});
-
-	return buffer;
-};
-
-var compare = function(actual, expected) {
-	String(actual.contents).trim().should.equal(String(expected.contents).trim());
-};
-
-var testStream = function(stream, fixtureSupplier, expectedName, done) {
-	var buffer = constructBuffer(stream);
-
-	stream.on('end', function() {
-		buffer.should.have.length(1);
-
-		var output = buffer[0];
-
-		output.relative.should.equal(expectedName);
-		compare(output, expected(expectedName));
-
-		done();
-	});
-
-	if (typeof fixtureSupplier === 'string') {
-		fixtureSupplier = fixture.bind(null, fixtureSupplier);
-	}
-
-	stream.write(fixtureSupplier());
-
-	stream.end();
-};
+var testStream = require('./utils/test-stream');
 
 describe('gulp-requirejs-optimize', function() {
 	it('should accept no options', function(done) {
