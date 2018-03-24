@@ -34,7 +34,7 @@
     "gulp-coveralls": "^0.1.4",
     "gulp-istanbul": "^1.0.0",
     "gulp-mocha": "^2.2.0",
-    "gulp-xo": "^0.12.0",
+    "gulp-xo": "^0.17.1",
     "run-sequence": "^1.2.2",
     "should": "^9.0.2"
   },
