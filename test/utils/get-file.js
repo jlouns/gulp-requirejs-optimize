@@ -3,10 +3,10 @@
 var fs = require('fs');
 var path = require('path');
 
-var gutil = require('gulp-util');
+var Vinyl = require('vinyl');
 
 module.exports = function getFile(filepath) {
-	return new gutil.File({
+	return new Vinyl({
 		base: path.dirname(filepath),
 		path: filepath,
 		cwd: './test/',

@@ -3,10 +3,12 @@
 var path = require('path');
 
 var defaults = require('lodash.defaults');
-var gutil = require('gulp-util');
 var through = require('through2');
 var requirejs = require('requirejs');
 var chalk = require('chalk');
+var Vinyl = require('vinyl');
+var log = require('fancy-log');
+var PluginError = require('plugin-error');
 var applySourceMap = require('vinyl-sourcemaps-apply');
 
 var PLUGIN_NAME = 'gulp-requirejs-optimize';
@@ -29,9 +31,9 @@ module.exports = function(options) {
 	requirejs.define('node/print', [], function() {
 		return function(msg) {
 			if (msg.substring(0, 5) === 'Error') {
-				gutil.log(chalk.red(msg));
+				log(chalk.red(msg));
 			} else {
-				gutil.log(msg);
+				log(msg);
 			}
 		};
 	});
@@ -56,13 +58,13 @@ module.exports = function(options) {
 		}
 
 		if (file.isStream()) {
-			cb(new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported'));
+			cb(new PluginError(PLUGIN_NAME, 'Streaming not supported'));
 			return;
 		}
 
 		var optimizeOptions = generateOptions(file);
 		if (typeof optimizeOptions !== 'object') {
-			cb(new gutil.PluginError(PLUGIN_NAME, 'Options function must produce an options object'));
+			cb(new PluginError(PLUGIN_NAME, 'Options function must produce an options object'));
 			return;
 		}
 
@@ -86,7 +88,7 @@ module.exports = function(options) {
 		}
 
 		if (typeof optimizeOptions.out !== 'string') {
-			cb(new gutil.PluginError(PLUGIN_NAME, 'If `out` is supplied, it must be a string'));
+			cb(new PluginError(PLUGIN_NAME, 'If `out` is supplied, it must be a string'));
 			return;
 		}
 
@@ -97,7 +99,7 @@ module.exports = function(options) {
 				text = text.replace(/\/\/# sourceMappingURL=.*$/, '');
 			}
 
-			var outfile = new gutil.File({
+			var outfile = new Vinyl({
 				path: out,
 				contents: new Buffer(text)
 			});
@@ -116,14 +118,14 @@ module.exports = function(options) {
 			target = file.relative;
 		}
 
-		gutil.log('Optimizing ' + chalk.magenta(target));
+		log('Optimizing ' + chalk.magenta(target));
 		requirejs.optimize(optimizeOptions, null, function(err) {
 			error = err;
 			cb();
 		});
 	}, function(cb) {
 		if (error) {
-			cb(new gutil.PluginError(PLUGIN_NAME, error));
+			cb(new PluginError(PLUGIN_NAME, error));
 		}
 
 		cb();

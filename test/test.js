@@ -4,7 +4,7 @@
 var path = require('path');
 
 var should = require('should');
-var gutil = require('gulp-util');
+var Vinyl = require('vinyl');
 var requirejsOptimize = require('../');
 
 var fixture = require('./utils/fixture');
@@ -66,13 +66,14 @@ describe('gulp-requirejs-optimize', function() {
 			}
 		});
 
-		stream.write(new gutil.File());
+		stream.write(new Vinyl());
 
 		stream.end();
 	});
 
 	it('should error on stream file', function(done) {
 		var stream = requirejsOptimize();
+		var contentStream = requirejsOptimize();
 
 		stream.on('error', function(err) {
 			try {
@@ -83,8 +84,8 @@ describe('gulp-requirejs-optimize', function() {
 			}
 		});
 
-		stream.write(new gutil.File({
-			contents: stream
+		stream.write(new Vinyl({
+			contents: contentStream
 		}));
 	});
 
