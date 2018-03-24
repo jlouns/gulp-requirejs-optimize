@@ -69,6 +69,7 @@ module.exports = function(options) {
 		}
 
 		var sourceMapPresent = Boolean(file.sourceMap);
+		var logLevelPresent = Boolean(optimizeOptions.logLevel);
 
 		optimizeOptions = defaults({}, optimizeOptions, {
 			logLevel: 2,
@@ -118,7 +119,9 @@ module.exports = function(options) {
 			target = file.relative;
 		}
 
-		log('Optimizing ' + chalk.magenta(target));
+		if (!logLevelPresent || optimizeOptions.logLevel < 2) {
+			log('Optimizing ' + chalk.magenta(target));
+		}
 		requirejs.optimize(optimizeOptions, null, function(err) {
 			error = err;
 			cb();
